@@ -1,0 +1,7 @@
+__pycache__
+*.pyc
+.git
+logs/*.log
+data/ohlcv/*
+combo_results/*
+.env

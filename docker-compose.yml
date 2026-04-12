@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  agent:
+    build: .
+    container_name: waverider-agent
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./logs:/app/logs
+      - ./validation:/app/validation
+    healthcheck:
+      test: ["CMD", "python3", "agent.py", "--status"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    command: ["agent.py"]

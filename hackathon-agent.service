@@ -1,0 +1,25 @@
+[Unit]
+Description=JudyAI WaveRider Trading Agent
+Documentation=https://github.com/JudyaiLab/hackathon-trading-agent
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/hackathon-trading-agent
+EnvironmentFile=/opt/hackathon-trading-agent/.env
+ExecStart=/usr/bin/python3 agent.py
+Restart=on-failure
+RestartSec=30
+StandardOutput=journal
+StandardError=journal
+WatchdogSec=300
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+PrivateTmp=true
+ReadWritePaths=/opt/hackathon-trading-agent/logs /opt/hackathon-trading-agent/validation
+
+[Install]
+WantedBy=multi-user.target

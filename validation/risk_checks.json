@@ -1,0 +1,3253 @@
+{
+  "description": "Risk check records \u2014 5-layer risk management decision audit trail",
+  "version": "1.0",
+  "riskLayers": [
+    "L1: Position sizing (max 5% portfolio per trade)",
+    "L2: Daily loss limit (3% daily \u2192 auto stop)",
+    "L3: Total drawdown limit (10% \u2192 emergency close all)",
+    "L4: Consecutive loss pause (5 losses \u2192 pause, 3 losses \u2192 50% size)",
+    "L5: Regime filter (EMA convergence \u2192 block all trades)",
+    "L6: Human-in-the-loop override (manual operator intervention for capital preservation)"
+  ],
+  "records": [
+    {
+      "id": "RC-001",
+      "timestamp": "2026-03-28T14:00:00Z",
+      "tradeIntentId": "TI-001",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000.0,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 3218.0,
+          "sizePct": 3.22,
+          "note": "Position sized at 3.22% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": -420.5,
+          "dailyPnlPct": -0.42,
+          "limit": -3.0,
+          "note": "Daily loss 0.42% \u2014 well within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 102300.0,
+          "currentValue": 100000.0,
+          "drawdownPct": -2.25,
+          "limit": -10.0,
+          "note": "Drawdown 2.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 1,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "1 consecutive loss \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "regime": "TRENDING_UP",
+          "adx": 28.5,
+          "bbWidth": 0.045,
+          "note": "Trending regime \u2014 all strategies allowed"
+        }
+      },
+      "finalDecision": "APPROVED",
+      "effectivePositionScale": 1.0,
+      "source": "BACKTEST_VALIDATION"
+    },
+    {
+      "id": "RC-002",
+      "timestamp": "2026-03-28T18:00:00Z",
+      "tradeIntentId": "TI-002",
+      "pair": "SOL/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 101630.0,
+          "maxRiskAmount": 5081.5,
+          "calculatedSize": 4250.0,
+          "sizePct": 4.18,
+          "note": "Position sized at 4.18% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 1630.0,
+          "dailyPnlPct": 1.63,
+          "limit": -3.0,
+          "note": "Daily PnL positive \u2014 no concern"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 102300.0,
+          "currentValue": 101630.0,
+          "drawdownPct": -0.65,
+          "limit": -10.0,
+          "note": "Drawdown 0.65% \u2014 minimal"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 full sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "regime": "TRENDING_UP",
+          "adx": 31.2,
+          "bbWidth": 0.052,
+          "note": "Strong trend \u2014 full go"
+        }
+      },
+      "finalDecision": "APPROVED",
+      "effectivePositionScale": 1.0,
+      "source": "BACKTEST_VALIDATION"
+    },
+    {
+      "id": "RC-003",
+      "timestamp": "2026-03-27T10:00:00Z",
+      "tradeIntentId": "TI-003",
+      "pair": "XRP/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 99800.0,
+          "maxRiskAmount": 4990.0,
+          "calculatedSize": 2800.0,
+          "sizePct": 2.81,
+          "note": "Reduced by regime scaling (75%)"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": -200.0,
+          "dailyPnlPct": -0.2,
+          "limit": -3.0,
+          "note": "Minor daily loss \u2014 within limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 102300.0,
+          "currentValue": 99800.0,
+          "drawdownPct": -2.44,
+          "limit": -10.0,
+          "note": "Drawdown moderate but acceptable"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 2,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "2 consecutive losses \u2014 still normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "regime": "RANGING",
+          "adx": 18.2,
+          "bbWidth": 0.028,
+          "note": "Ranging \u2014 longs allowed with wider SL (1.5x ATR), 75% sizing"
+        }
+      },
+      "finalDecision": "APPROVED_REDUCED",
+      "effectivePositionScale": 0.75,
+      "scaleReason": "Ranging regime \u2192 75% position sizing",
+      "source": "BACKTEST_VALIDATION"
+    },
+    {
+      "id": "RC-004",
+      "timestamp": "2026-03-25T02:00:00Z",
+      "tradeIntentId": "TI-008",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": "N/A",
+          "note": "Blocked before sizing"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 450.0,
+          "dailyPnlPct": 0.45,
+          "limit": -3.0
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "drawdownPct": -1.1,
+          "limit": -10.0
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0
+        },
+        "L5_regimeFilter": {
+          "passed": false,
+          "regime": "EMA_CONVERGENCE",
+          "adx": 12.3,
+          "bbWidth": 0.015,
+          "note": "EMA convergence detected \u2014 ALL trading BLOCKED"
+        }
+      },
+      "finalDecision": "REJECTED",
+      "rejectReason": "L5 regime filter: EMA convergence blocks all entries",
+      "source": "BACKTEST_VALIDATION"
+    },
+    {
+      "id": "RC-005",
+      "timestamp": "2026-03-24T06:00:00Z",
+      "tradeIntentId": null,
+      "pair": "ALL",
+      "checks": {
+        "L1_positionSize": {
+          "passed": "N/A",
+          "note": "Emergency \u2014 all positions closed"
+        },
+        "L2_dailyLoss": {
+          "passed": false,
+          "dailyPnl": -3150.0,
+          "dailyPnlPct": -3.15,
+          "limit": -3.0,
+          "note": "Daily loss exceeded 3% \u2014 AUTO STOP triggered"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "drawdownPct": -5.8,
+          "limit": -10.0
+        },
+        "L4_consecutiveLoss": {
+          "passed": false,
+          "consecutiveLosses": 4,
+          "note": "Approaching pause threshold"
+        },
+        "L5_regimeFilter": {
+          "passed": "N/A",
+          "note": "Overridden by L2 auto-stop"
+        }
+      },
+      "finalDecision": "EMERGENCY_STOP",
+      "action": "All open positions closed at market. Trading paused for remainder of day.",
+      "recoveryNote": "Trading resumed next day after daily reset. Consecutive loss counter carried forward.",
+      "source": "BACKTEST_VALIDATION"
+    },
+    {
+      "id": "RC-006",
+      "timestamp": "2026-03-23T14:00:00Z",
+      "tradeIntentId": null,
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": "N/A",
+          "note": "Blacklisted pair \u2014 no sizing"
+        },
+        "L2_dailyLoss": {
+          "passed": true
+        },
+        "L3_totalDrawdown": {
+          "passed": true
+        },
+        "L4_consecutiveLoss": {
+          "passed": false,
+          "consecutiveLosses": 3,
+          "sizeScale": 0.5,
+          "note": "3 consecutive losses \u2014 size reduced to 50%"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "regime": "TRENDING_UP"
+        }
+      },
+      "finalDecision": "REJECTED",
+      "rejectReason": "BTC/USDT long blacklisted (OOS win rate 40%). Pair-level block overrides all layers.",
+      "source": "BACKTEST_VALIDATION"
+    },
+    {
+      "id": "RC-007",
+      "timestamp": "2026-04-01T02:00:00Z",
+      "tradeIntentId": "TI-010",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 103480.0,
+          "maxRiskAmount": 5174.0,
+          "calculatedSize": 4850.0,
+          "sizePct": 4.69,
+          "note": "Position sized at 4.69% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0.0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "New day \u2014 daily counter reset at midnight UTC"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 103480.0,
+          "currentValue": 103480.0,
+          "drawdownPct": 0.0,
+          "limit": -10.0,
+          "note": "At equity high \u2014 zero drawdown"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "Loss streak reset after profitable day"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "regime": "BREAKOUT_FORMING",
+          "adx": 22.1,
+          "bbWidth": 0.012,
+          "note": "BB Squeeze breakout regime \u2014 full sizing allowed"
+        }
+      },
+      "finalDecision": "APPROVED",
+      "effectivePositionScale": 1.0,
+      "source": "LIVE_PAPER_TRADING"
+    },
+    {
+      "id": "RC-008",
+      "timestamp": "2026-04-01T06:00:00Z",
+      "tradeIntentId": "TI-011",
+      "pair": "XRP/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": false,
+          "portfolioValue": 103480.0,
+          "openPositions": 5,
+          "maxConcurrent": 5,
+          "note": "MAX CONCURRENT POSITIONS REACHED \u2014 5/5 slots filled"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 2150.0,
+          "dailyPnlPct": 2.08,
+          "limit": -3.0
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "drawdownPct": 0.0
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "regime": "TRENDING_UP",
+          "adx": 26.3
+        }
+      },
+      "finalDecision": "REJECTED",
+      "rejectReason": "L1 position limit: 5/5 concurrent positions filled. Signal queued for next available slot.",
+      "source": "LIVE_PAPER_TRADING"
+    },
+    {
+      "id": "RC-009",
+      "timestamp": "2026-04-01T10:00:00Z",
+      "tradeIntentId": "TI-012",
+      "pair": "DOGE/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 105630.0,
+          "maxRiskAmount": 5281.5,
+          "calculatedSize": 2640.0,
+          "sizePct": 2.5,
+          "note": "Position sized at 2.50% \u2014 reduced by HIGH_VOLATILITY regime (50% scale)"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 2150.0,
+          "dailyPnlPct": 2.04,
+          "limit": -3.0,
+          "note": "Profitable day \u2014 no concern"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 105630.0,
+          "currentValue": 105630.0,
+          "drawdownPct": 0.0,
+          "limit": -10.0,
+          "note": "New equity high"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "sizeScale": 1.0,
+          "note": "Clean streak \u2014 but regime forces 50% scale anyway"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "regime": "HIGH_VOLATILITY",
+          "adx": 14.8,
+          "bbWidth": 0.082,
+          "bbWidthNorm": 2.05,
+          "note": "BB width 2.05x normal \u2014 HIGH_VOLATILITY. Longs allowed but 50% sizing + 1.8x ATR SL"
+        }
+      },
+      "finalDecision": "APPROVED_REDUCED",
+      "effectivePositionScale": 0.5,
+      "scaleReason": "High volatility regime \u2192 50% sizing + wider SL. N2 counter-trend combo overrides DOGE long degradation.",
+      "source": "LIVE_PAPER_TRADING"
+    },
+    {
+      "id": "RC-010",
+      "timestamp": "2026-03-31T12:00:10Z",
+      "tradeIntentId": "TI-013",
+      "pair": "ETH/USDT",
+      "source": "LIVE_PAPER_TRADING",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000.0,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 4999.0,
+          "sizePct": 5.0,
+          "note": "Position sized at max 5% \u2014 triple confluence signal warrants full allocation"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0.0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "First trade of the day \u2014 clean slate"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100000.0,
+          "currentValue": 100000.0,
+          "drawdownPct": 0.0,
+          "limit": -10.0,
+          "note": "Starting balance \u2014 no drawdown"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "sizeScale": 1.0,
+          "note": "No prior losses \u2014 full sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "regime": "TRENDING_UP",
+          "adx": 25.4,
+          "bbWidth": 0.032,
+          "note": "Trending up regime \u2014 full long strategies enabled"
+        }
+      },
+      "finalDecision": "APPROVED",
+      "effectivePositionScale": 1.0,
+      "liveResult": "Trade closed at $2134.82 \u2014 realized +$247.01 (+4.94%)"
+    },
+    {
+      "id": "RC-011",
+      "timestamp": "2026-03-31T16:00:10Z",
+      "tradeIntentId": "TI-014",
+      "pair": "XRP/USDT",
+      "source": "LIVE_PAPER_TRADING",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100247.01,
+          "maxRiskAmount": 5012.35,
+          "calculatedSize": 4998.0,
+          "sizePct": 4.99,
+          "note": "Position sized at 4.99% \u2014 within 5% limit. Balance includes ETH realized PnL."
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 247.01,
+          "dailyPnlPct": 0.247,
+          "limit": -3.0,
+          "note": "Net positive daily PnL from ETH trade \u2014 no daily limit concern"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247.01,
+          "currentValue": 100247.01,
+          "drawdownPct": 0.0,
+          "limit": -10.0,
+          "note": "New peak equity after ETH profit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "sizeScale": 1.0,
+          "note": "Last trade was a winner \u2014 counter at zero"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "regime": "TRENDING_UP",
+          "adx": 23.8,
+          "bbWidth": 0.028,
+          "note": "Trending up \u2014 MACD divergence strategy active"
+        }
+      },
+      "finalDecision": "APPROVED",
+      "effectivePositionScale": 1.0,
+      "liveResult": "TP1 hit \u2014 SL moved to breakeven. Trade now risk-free, targeting TP2/TP3."
+    },
+    {
+      "id": "RC-012",
+      "timestamp": "2026-04-08T23:02:23Z",
+      "tradeIntentId": "TI-016",
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 99904.0,
+          "maxRiskAmount": 4995.2,
+          "calculatedSize": 4982.8,
+          "sizePct": 4.99,
+          "note": "Position capped at 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": -88.8,
+          "dailyPnlPct": -0.089,
+          "limit": -3.0,
+          "note": "Daily loss well within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "totalPnl": -96.05,
+          "totalPnlPct": -0.096,
+          "limit": -10.0,
+          "note": "Total drawdown 0.1% \u2014 far from 10% emergency limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 1,
+          "pauseThreshold": 5,
+          "scaleReduction": "none",
+          "note": "Only 1 consecutive loss \u2014 no scaling needed"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "regime": "TRENDING_DOWN",
+          "emaConvergence": false,
+          "note": "MACD divergence valid in trending down regime"
+        }
+      },
+      "allPassed": true,
+      "action": "TRADE_APPROVED",
+      "note": "All 5 risk layers passed. Position sized at maximum 5% allocation.",
+      "source": "LIVE_PAPER_TRADING"
+    },
+    {
+      "id": "RC-013",
+      "timestamp": "2026-04-09T02:01:54Z",
+      "tradeIntentId": "TI-017",
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 99913.67,
+          "maxRiskAmount": 4995.7,
+          "calculatedSize": 4978.2,
+          "sizePct": 4.98,
+          "note": "Position at 4.98% \u2014 within 5% cap"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 10.38,
+          "dailyPnlPct": 0.01,
+          "limit": -3.0,
+          "note": "Daily PnL positive \u2014 no daily stop concern"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "totalPnl": -85.67,
+          "totalPnlPct": -0.086,
+          "limit": -10.0,
+          "note": "Drawdown minimal"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "note": "No consecutive losses"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "regime": "RANGING",
+          "emaConvergence": false,
+          "note": "Ranging regime \u2014 short allowed with adjusted sizing"
+        }
+      },
+      "allPassed": true,
+      "action": "TRADE_APPROVED",
+      "source": "LIVE_PAPER_TRADING"
+    },
+    {
+      "id": "RC-014",
+      "timestamp": "2026-04-09T11:33:53Z",
+      "tradeIntentId": "TI-018",
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 99904.11,
+          "maxRiskAmount": 4995.2,
+          "calculatedSize": 4981.9,
+          "sizePct": 4.99,
+          "note": "Maximum allocation near 5% cap"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0.15,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily PnL near zero \u2014 room for trading"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "totalPnl": -95.89,
+          "totalPnlPct": -0.096,
+          "limit": -10.0,
+          "note": "Total drawdown under 0.1%"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 1,
+          "pauseThreshold": 5,
+          "scaleReduction": "none",
+          "note": "1 consecutive loss \u2014 within tolerance"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "regime": "TRENDING_UP",
+          "warning": "Counter-trend short in uptrend \u2014 elevated risk",
+          "note": "Regime filter passed but AI flagged for review"
+        }
+      },
+      "allPassed": true,
+      "action": "TRADE_APPROVED_WITH_WARNING",
+      "aiOverride": {
+        "triggered": true,
+        "action": "EXIT_NOW",
+        "urgency": 85,
+        "reasoning": "MiniMax M2.7 identified strong uptrend (ADX 53.6) adversely positioned against short \u2014 recommended immediate exit after 42min",
+        "result": "Position closed at -$9.19 loss (prevented potential -$99.6 max loss at SL)"
+      },
+      "note": "Risk layers all passed at entry, but AI position review correctly identified deteriorating conditions and overrode hold decision. Demonstrates 6th risk layer: AI real-time oversight.",
+      "source": "LIVE_PAPER_TRADING"
+    },
+    {
+      "id": "RC-015",
+      "timestamp": "2026-04-09T10:05:56Z",
+      "tradeIntentId": "TI-020",
+      "pair": "BTC/USDT",
+      "type": "MANUAL_OVERRIDE",
+      "checks": {
+        "L6_humanOverride": {
+          "triggered": true,
+          "operator": "JUDY",
+          "action": "MANUAL_CLOSE",
+          "reasoning": "Pattern of counter-trend short losses identified. Human operator exercised override authority to prevent further drawdown.",
+          "capitalPreserved": 80.69,
+          "note": "6th risk layer: Human-in-the-loop override for capital preservation"
+        }
+      },
+      "action": "POSITION_CLOSED_MANUAL",
+      "note": "Human override demonstrates trust-minimized but human-supervised trading. Operator identified systemic issue (counter-trend shorts in uptrend) that strategy parameters hadn't yet adapted to.",
+      "source": "LIVE_PAPER_TRADING"
+    },
+    {
+      "id": "RC-016",
+      "timestamp": "2026-04-09T15:06:44.543670+00:00",
+      "tradeIntentId": "",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 101.72,
+          "sizePct": 0.1,
+          "note": "Position sized at 0.1% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-017",
+      "timestamp": "2026-04-09T15:06:44.548503+00:00",
+      "tradeIntentId": "",
+      "pair": "XRP/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 0.07,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-018",
+      "timestamp": "2026-04-09T15:06:44.554711+00:00",
+      "tradeIntentId": "",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 101.72,
+          "sizePct": 0.1,
+          "note": "Position sized at 0.1% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-019",
+      "timestamp": "2026-04-09T15:06:44.562503+00:00",
+      "tradeIntentId": "",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 102.11,
+          "sizePct": 0.1,
+          "note": "Position sized at 0.1% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-020",
+      "timestamp": "2026-04-09T15:06:44.567270+00:00",
+      "tradeIntentId": "",
+      "pair": "SOL/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 4.04,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-021",
+      "timestamp": "2026-04-09T15:06:44.574884+00:00",
+      "tradeIntentId": "",
+      "pair": "LINK/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 0.43,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-022",
+      "timestamp": "2026-04-09T15:06:44.580052+00:00",
+      "tradeIntentId": "",
+      "pair": "BNB/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 30.42,
+          "sizePct": 0.03,
+          "note": "Position sized at 0.03% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-023",
+      "timestamp": "2026-04-09T15:06:44.585356+00:00",
+      "tradeIntentId": "",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 101.56,
+          "sizePct": 0.1,
+          "note": "Position sized at 0.1% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-024",
+      "timestamp": "2026-04-09T15:06:44.591520+00:00",
+      "tradeIntentId": "",
+      "pair": "SOL/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 4.04,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-025",
+      "timestamp": "2026-04-09T15:06:44.597606+00:00",
+      "tradeIntentId": "",
+      "pair": "XRP/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 0.06,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-026",
+      "timestamp": "2026-04-09T15:06:44.605934+00:00",
+      "tradeIntentId": "",
+      "pair": "LINK/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 0.43,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-027",
+      "timestamp": "2026-04-09T15:06:44.616136+00:00",
+      "tradeIntentId": "",
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 3355.65,
+          "sizePct": 3.36,
+          "note": "Position sized at 3.36% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-028",
+      "timestamp": "2026-04-09T15:06:44.622958+00:00",
+      "tradeIntentId": "",
+      "pair": "SOL/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 4.03,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-029",
+      "timestamp": "2026-04-09T15:06:44.630026+00:00",
+      "tradeIntentId": "",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 102.1,
+          "sizePct": 0.1,
+          "note": "Position sized at 0.1% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-030",
+      "timestamp": "2026-04-09T15:06:44.643333+00:00",
+      "tradeIntentId": "",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 105.41,
+          "sizePct": 0.11,
+          "note": "Position sized at 0.11% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-031",
+      "timestamp": "2026-04-09T15:06:44.650882+00:00",
+      "tradeIntentId": "",
+      "pair": "BNB/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 30.23,
+          "sizePct": 0.03,
+          "note": "Position sized at 0.03% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-032",
+      "timestamp": "2026-04-09T15:06:44.658677+00:00",
+      "tradeIntentId": "",
+      "pair": "LINK/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 0.44,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-033",
+      "timestamp": "2026-04-09T15:06:44.666151+00:00",
+      "tradeIntentId": "",
+      "pair": "SOL/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 4.1,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-034",
+      "timestamp": "2026-04-09T15:06:44.700009+00:00",
+      "tradeIntentId": "",
+      "pair": "BNB/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 29.92,
+          "sizePct": 0.03,
+          "note": "Position sized at 0.03% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-035",
+      "timestamp": "2026-04-09T15:06:44.741936+00:00",
+      "tradeIntentId": "",
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 3554.01,
+          "sizePct": 3.55,
+          "note": "Position sized at 3.55% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-036",
+      "timestamp": "2026-04-09T15:06:44.766997+00:00",
+      "tradeIntentId": "",
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 3547.43,
+          "sizePct": 3.55,
+          "note": "Position sized at 3.55% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-037",
+      "timestamp": "2026-04-09T15:06:44.780913+00:00",
+      "tradeIntentId": "",
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 3553.67,
+          "sizePct": 3.55,
+          "note": "Position sized at 3.55% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-038",
+      "timestamp": "2026-04-09T15:32:00.588296+00:00",
+      "tradeIntentId": "",
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 99649.32,
+          "maxRiskAmount": 4982.47,
+          "calculatedSize": 4982.47,
+          "sizePct": 5.0,
+          "note": "Position sized at 5.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": -17.72,
+          "dailyPnlPct": -0.02,
+          "limit": -3.0,
+          "note": "Daily loss 0.02% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247.01,
+          "currentValue": 99649.32,
+          "drawdownPct": 0.6,
+          "limit": -10.0,
+          "note": "Drawdown 0.6% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 1,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "1 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime  \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-039",
+      "timestamp": "2026-04-09T17:01:41.708890+00:00",
+      "tradeIntentId": "",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 101.72,
+          "sizePct": 0.1,
+          "note": "Position sized at 0.1% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-040",
+      "timestamp": "2026-04-09T17:01:41.717617+00:00",
+      "tradeIntentId": "",
+      "pair": "XRP/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 0.07,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-041",
+      "timestamp": "2026-04-09T17:01:41.728607+00:00",
+      "tradeIntentId": "",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 101.72,
+          "sizePct": 0.1,
+          "note": "Position sized at 0.1% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-042",
+      "timestamp": "2026-04-09T17:01:41.741943+00:00",
+      "tradeIntentId": "",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 102.11,
+          "sizePct": 0.1,
+          "note": "Position sized at 0.1% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-043",
+      "timestamp": "2026-04-09T17:01:41.751221+00:00",
+      "tradeIntentId": "",
+      "pair": "SOL/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 4.04,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-044",
+      "timestamp": "2026-04-09T17:01:41.765015+00:00",
+      "tradeIntentId": "",
+      "pair": "LINK/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 0.43,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-045",
+      "timestamp": "2026-04-09T17:01:41.774449+00:00",
+      "tradeIntentId": "",
+      "pair": "BNB/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 30.42,
+          "sizePct": 0.03,
+          "note": "Position sized at 0.03% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-046",
+      "timestamp": "2026-04-09T17:01:41.784174+00:00",
+      "tradeIntentId": "",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 101.56,
+          "sizePct": 0.1,
+          "note": "Position sized at 0.1% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-047",
+      "timestamp": "2026-04-09T17:01:41.794060+00:00",
+      "tradeIntentId": "",
+      "pair": "SOL/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 4.04,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-048",
+      "timestamp": "2026-04-09T17:01:41.804176+00:00",
+      "tradeIntentId": "",
+      "pair": "XRP/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 0.06,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-049",
+      "timestamp": "2026-04-09T17:01:41.816980+00:00",
+      "tradeIntentId": "",
+      "pair": "LINK/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 0.43,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-050",
+      "timestamp": "2026-04-09T17:01:41.832458+00:00",
+      "tradeIntentId": "",
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 3355.65,
+          "sizePct": 3.36,
+          "note": "Position sized at 3.36% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-051",
+      "timestamp": "2026-04-09T17:01:41.843073+00:00",
+      "tradeIntentId": "",
+      "pair": "SOL/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 4.03,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-052",
+      "timestamp": "2026-04-09T17:01:41.853965+00:00",
+      "tradeIntentId": "",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 102.1,
+          "sizePct": 0.1,
+          "note": "Position sized at 0.1% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-053",
+      "timestamp": "2026-04-09T17:01:41.872865+00:00",
+      "tradeIntentId": "",
+      "pair": "ETH/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 105.41,
+          "sizePct": 0.11,
+          "note": "Position sized at 0.11% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-054",
+      "timestamp": "2026-04-09T17:01:41.884094+00:00",
+      "tradeIntentId": "",
+      "pair": "BNB/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 30.23,
+          "sizePct": 0.03,
+          "note": "Position sized at 0.03% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-055",
+      "timestamp": "2026-04-09T17:01:41.895457+00:00",
+      "tradeIntentId": "",
+      "pair": "LINK/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 0.44,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-056",
+      "timestamp": "2026-04-09T17:01:41.907189+00:00",
+      "tradeIntentId": "",
+      "pair": "SOL/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 4.1,
+          "sizePct": 0.0,
+          "note": "Position sized at 0.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-057",
+      "timestamp": "2026-04-09T17:01:41.956019+00:00",
+      "tradeIntentId": "",
+      "pair": "BNB/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 29.92,
+          "sizePct": 0.03,
+          "note": "Position sized at 0.03% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-058",
+      "timestamp": "2026-04-09T17:01:42.010904+00:00",
+      "tradeIntentId": "",
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 3554.01,
+          "sizePct": 3.55,
+          "note": "Position sized at 3.55% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-059",
+      "timestamp": "2026-04-09T17:01:42.046284+00:00",
+      "tradeIntentId": "",
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 3547.43,
+          "sizePct": 3.55,
+          "note": "Position sized at 3.55% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-060",
+      "timestamp": "2026-04-09T17:01:42.068225+00:00",
+      "tradeIntentId": "",
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 3553.67,
+          "sizePct": 3.55,
+          "note": "Position sized at 3.55% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-061",
+      "timestamp": "2026-04-09T17:01:42.080690+00:00",
+      "tradeIntentId": "",
+      "pair": "BTC/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 100000,
+          "maxRiskAmount": 5000.0,
+          "calculatedSize": 3565.49,
+          "sizePct": 3.57,
+          "note": "Position sized at 3.57% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": 0,
+          "dailyPnlPct": 0.0,
+          "limit": -3.0,
+          "note": "Daily loss 0.0% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247,
+          "currentValue": 100000,
+          "drawdownPct": 0.25,
+          "limit": -10.0,
+          "note": "Drawdown 0.25% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 0,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "0 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime UNKNOWN \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    },
+    {
+      "id": "RC-062",
+      "timestamp": "2026-04-09T17:05:00.740014+00:00",
+      "tradeIntentId": "",
+      "pair": "XRP/USDT",
+      "checks": {
+        "L1_positionSize": {
+          "passed": true,
+          "portfolioValue": 99649.32,
+          "maxRiskAmount": 4982.47,
+          "calculatedSize": 4982.47,
+          "sizePct": 5.0,
+          "note": "Position sized at 5.0% \u2014 within 5% limit"
+        },
+        "L2_dailyLoss": {
+          "passed": true,
+          "dailyPnl": -61.82,
+          "dailyPnlPct": -0.06,
+          "limit": -3.0,
+          "note": "Daily loss 0.06% \u2014 within 3% limit"
+        },
+        "L3_totalDrawdown": {
+          "passed": true,
+          "peakValue": 100247.01,
+          "currentValue": 99649.32,
+          "drawdownPct": 0.6,
+          "limit": -10.0,
+          "note": "Drawdown 0.6% from peak \u2014 within 10% limit"
+        },
+        "L4_consecutiveLoss": {
+          "passed": true,
+          "consecutiveLosses": 2,
+          "pauseThreshold": 5,
+          "sizeReductionThreshold": 3,
+          "sizeScale": 1.0,
+          "note": "2 consecutive losses \u2014 normal sizing"
+        },
+        "L5_regimeFilter": {
+          "passed": true,
+          "detectedRegime": "UNKNOWN",
+          "allowedRegimes": [
+            "TRENDING_UP",
+            "TRENDING_DOWN",
+            "RANGING",
+            "HIGH_VOLATILITY",
+            "BREAKOUT_FORMING",
+            "TREND_EXHAUSTION"
+          ],
+          "note": "Regime  \u2014 trading allowed"
+        }
+      },
+      "allPassed": true,
+      "blockReason": "",
+      "source": "LIVE_TRADE"
+    }
+  ],
+  "summary": {
+    "totalChecks": 15,
+    "lastUpdated": "2026-04-09T10:05:56Z"
+  }
+}

@@ -1,0 +1,26 @@
+[project]
+name = "hackathon-trading-agent"
+version = "1.0.0"
+description = "AI-powered trading agent for the AgenticTrade hackathon"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+dependencies = [
+    "numpy==1.26.4",
+    "pandas==2.2.2",
+    "web3==6.20.1",
+    "requests==2.32.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.2.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"

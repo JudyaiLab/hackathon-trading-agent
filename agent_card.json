@@ -1,0 +1,138 @@
+{
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "name": "JudyAI WaveRider",
+  "description": "AI trading agent with dual-model ensemble (MiniMax M2.7 + Qwen 2.5) and OOS-validated multi-strategy engine (82.2% win rate). Features: WaveRider EMA+RSI+Volume, BB Squeeze, MACD Divergence with regime-adaptive routing and 7-layer risk management.",
+  "image": "https://judyailab.com/img/logo.png",
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://judyailab.com/"
+    },
+    {
+      "name": "MCP",
+      "endpoint": "stdio://hackathon-trading-agent",
+      "version": "2025-06-18"
+    }
+  ],
+  "active": true,
+  "registrations": [
+    {
+      "agentId": 17,
+      "agentRegistry": "eip155:11155111:0x97b07dDc405B0c28B17559aFFE63BdB3632d0ca3",
+      "type": "hackathon_shared"
+    }
+  ],
+  "supportedTrust": [
+    "reputation"
+  ],
+  "capabilities": {
+    "trading": {
+      "strategies": [
+        "WaveRider (EMA + RSI + Volume trend-following)",
+        "BB Squeeze (Bollinger Band compression breakout)",
+        "MACD Divergence (swing-point momentum divergence)"
+      ],
+      "regimeDetection": true,
+      "riskManagement": true,
+      "pairs": [
+        "BTC/USDT",
+        "ETH/USDT",
+        "SOL/USDT",
+        "XRP/USDT",
+        "DOGE/USDT",
+        "BNB/USDT",
+        "LINK/USDT"
+      ],
+      "timeframes": [
+        "4H"
+      ],
+      "execution": "Kraken paper trading via CLI"
+    }
+  },
+  "performance": {
+    "backtestWinRate": 82.2,
+    "backtestPeriod": "360 days",
+    "validation": "Walk-Forward Optimization (8 windows, IS=90d, OOS=30d)",
+    "oosWinRate": 82.2,
+    "oosWinRateRange": "80-87%",
+    "strategies": 3,
+    "strategyCombos": {
+      "I1c_MeanRev_1H": {
+        "winRate": "80-100%",
+        "trades": 58,
+        "note": "BB2σ+RSI25/75+Candlestick"
+      },
+      "J1c_Trend1D": {
+        "winRate": "85%",
+        "trades": 20,
+        "note": "I1c + 1D EMA200 filter"
+      },
+      "N1_TripleVP_1D": {
+        "winRate": "86.7%",
+        "trades": 15,
+        "note": "I1c + Volume Profile + 1D trend"
+      },
+      "N2_VP_Counter": {
+        "winRate": "87.5%",
+        "trades": 8,
+        "note": "PF=12.34, counter-trend regime"
+      }
+    },
+    "strategyComboPeriod": "36-cell matrix (6 coins × 6 regimes)"
+  },
+  "validationArtifacts": {
+    "tradeIntents": "validation/trade_intents.json",
+    "riskChecks": "validation/risk_checks.json",
+    "strategyCheckpoints": "validation/strategy_checkpoints.json",
+    "tradeIntentsCount": 67,
+    "riskChecksCount": 62,
+    "strategyCheckpointsCount": 85
+  },
+  "riskControls": {
+    "maxPositionPct": 5.0,
+    "maxDailyLossPct": 3.0,
+    "maxDrawdownPct": 10.0,
+    "maxConcurrentPositions": 5,
+    "consecutiveLossPause": 5
+  },
+  "contracts": {
+    "identity": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
+    "reputation": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
+    "network": "sepolia",
+    "chainId": 11155111,
+    "hackathon": {
+      "agentRegistry": "0x97b07dDc405B0c28B17559aFFE63BdB3632d0ca3",
+      "riskRouter": "0xd6A6952545FF6E6E6681c2d15C59f9EB8F40FdBC",
+      "validationRegistry": "0x92bF63E5C7Ac6980f237a7164Ab413BE226187F1",
+      "reputationRegistry": "0x423a9904e39537a9997fbaF0f220d79D7d545763",
+      "vault": "0x0E7CD8ef9743FEcf94f9103033a044caBD45fC90"
+    },
+    "wallet": "0x95C8B49C2A6124C436EA1a3f378991313f6f1c0A"
+  },
+  "created": "2026-04-10T05:52:17.437383+00:00",
+  "livePerformance": {
+    "startingBalance": 100000.0,
+    "currentValue": 99623.09,
+    "totalPnl": -376.91,
+    "totalPnlPct": -0.3769,
+    "totalTrades": 24,
+    "winRate": 40.0,
+    "wins": 10,
+    "losses": 14,
+    "maxDrawdown": 0.27,
+    "timestamp": "2026-04-11T03:00:00+00:00"
+  },
+  "integrity": {
+    "merkleRoot": "7395b079430a06811bbf98086ac8166aed1bbd9a019448f1725b25e1599a70e5",
+    "algorithm": "SHA-256 sorted-pair Merkle tree",
+    "totalRecords": 214,
+    "verifyCommand": "python3 merkle.py"
+  },
+  "reputation": {
+    "score": 94,
+    "winRate": 40.0,
+    "totalTrades": 24,
+    "lastUpdate": "2026-04-11T03:00:00+00:00",
+    "checkpointCount": 85
+  }
+}

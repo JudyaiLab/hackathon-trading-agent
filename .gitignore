@@ -1,0 +1,13 @@
+.env
+__pycache__/
+*.pyc
+logs/
+data/ohlcv/
+data/combo_results/
+reports/sprint_*.md
+reputation_score.json
+demo_raw.mp4
+docs/canva_pitch_prompt.md
+demo_v2.mp4
+docs/lablab_submission.md
+docs/lablab_copy.md

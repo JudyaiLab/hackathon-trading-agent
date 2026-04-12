@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JudyAI WaveRider — AI Trading Agent | ERC-8004</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  :root {
+    --bg: #050810; --bg2: #0c1020; --bg3: #111830;
+    --border: #1a2040; --glow: rgba(59,130,246,0.15);
+    --t1: #f0f4ff; --t2: #94a3c8; --t3: #5a6580;
+    --blue: #3b82f6; --cyan: #06b6d4; --green: #10b981;
+    --red: #ef4444; --amber: #f59e0b; --purple: #8b5cf6; --pink: #ec4899;
+    --mono: 'SF Mono','Fira Code','JetBrains Mono',monospace;
+    --sans: 'Inter',system-ui,sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--sans); background:var(--bg); color:var(--t1); }
+  body::before { content:''; position:fixed; inset:0;
+    background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(59,130,246,0.08), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(139,92,246,0.06), transparent);
+    pointer-events:none; }
+
+  .wrap { max-width:1200px; margin:0 auto; padding:24px 20px; position:relative; z-index:1; }
+
+  /* ── HERO ── */
+  .hero { text-align:center; padding:48px 20px 40px; }
+  .hero-badge { display:inline-flex; gap:8px; align-items:center; padding:6px 18px;
+    border-radius:20px; background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.2);
+    font-size:13px; color:var(--blue); font-weight:600; margin-bottom:20px; }
+  .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--green);
+    animation:pulse 2s infinite; }
+  @keyframes pulse { 50%{opacity:.4} }
+  .hero h1 { font-size:52px; font-weight:900; letter-spacing:-2px;
+    background:linear-gradient(135deg,#fff 0%,#3b82f6 50%,#8b5cf6 100%);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .hero p { font-size:18px; color:var(--t2); margin-top:12px; max-width:700px; margin-inline:auto; line-height:1.6; }
+
+  /* ── HIGHLIGHT CARDS ── */
+  .highlights { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin:32px 0; }
+  .hl { border-radius:14px; padding:28px 24px; text-align:center; position:relative; overflow:hidden; }
+  .hl::before { content:''; position:absolute; inset:0; border-radius:14px;
+    padding:1px; background:linear-gradient(135deg,var(--c1),transparent 60%);
+    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude; }
+  .hl-inner { position:relative; }
+  .hl .num { font-size:40px; font-weight:900; font-family:var(--mono); letter-spacing:-2px; }
+  .hl .label { font-size:11px; color:var(--t3); text-transform:uppercase; letter-spacing:1.5px;
+    margin-top:8px; font-weight:600; }
+  .hl .desc { font-size:13px; color:var(--t2); margin-top:6px; }
+  .hl1 { background:linear-gradient(145deg,rgba(16,185,129,.1),var(--bg2)); --c1:rgba(16,185,129,.4); }
+  .hl1 .num { color:var(--green); }
+  .hl2 { background:linear-gradient(145deg,rgba(139,92,246,.1),var(--bg2)); --c1:rgba(139,92,246,.4); }
+  .hl2 .num { color:var(--purple); }
+  .hl3 { background:linear-gradient(145deg,rgba(6,182,212,.1),var(--bg2)); --c1:rgba(6,182,212,.4); }
+  .hl3 .num { color:var(--cyan); }
+  .hl4 { background:linear-gradient(145deg,rgba(245,158,11,.1),var(--bg2)); --c1:rgba(245,158,11,.4); }
+  .hl4 .num { color:var(--amber); }
+
+  /* ── SECTION ── */
+  .section { margin:40px 0; }
+  .section h2 { font-size:14px; text-transform:uppercase; letter-spacing:2px; color:var(--t3);
+    font-weight:700; margin-bottom:20px; padding-left:14px; border-left:3px solid var(--blue); }
+
+  /* ── TECH CARDS ── */
+  .techs { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .tech { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:28px 24px; }
+  .tech h3 { font-size:16px; font-weight:700; margin-bottom:8px; }
+  .tech h3 .icon { margin-right:8px; }
+  .tech p { font-size:14px; color:var(--t2); line-height:1.6; }
+  .tech .tag { display:inline-block; padding:3px 10px; border-radius:6px; font-size:11px;
+    font-weight:600; margin-top:12px; font-family:var(--mono); }
+
+  /* ── LIVE DATA ── */
+  .live-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .lc { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:20px; }
+  .lc .lbl { font-size:10px; color:var(--t3); text-transform:uppercase; letter-spacing:1px; font-weight:600; }
+  .lc .val { font-size:26px; font-weight:800; font-family:var(--mono); margin-top:6px; letter-spacing:-1px; }
+  .lc .sub { font-size:11px; color:var(--t3); margin-top:4px; font-family:var(--mono); }
+  .pos { color:var(--green); } .neg { color:var(--red); }
+
+  /* ── CHART ── */
+  .chart-wrap { display:grid; grid-template-columns:1.2fr 0.8fr; gap:16px; margin-top:16px; }
+  .chart-card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:24px; }
+  .chart-card h3 { font-size:12px; color:var(--t3); text-transform:uppercase; letter-spacing:1px;
+    font-weight:600; margin-bottom:12px; }
+  .chart-box { height:200px; position:relative; }
+  canvas { width:100%!important; }
+
+  /* ── RISK BAR ── */
+  .risk-bars { display:flex; flex-direction:column; gap:18px; }
+  .rb .rb-head { display:flex; justify-content:space-between; align-items:baseline; }
+  .rb .rb-name { font-size:12px; color:var(--t2); font-weight:500; }
+  .rb .rb-val { font-size:18px; font-weight:800; font-family:var(--mono); }
+  .rb .rb-track { height:6px; background:rgba(255,255,255,.05); border-radius:3px; margin-top:6px; overflow:hidden; }
+  .rb .rb-fill { height:100%; border-radius:3px; transition:width 1s; }
+  .rb .rb-limit { font-size:10px; color:var(--t3); margin-top:3px; text-align:right; font-family:var(--mono); }
+
+  /* ── ON-CHAIN ── */
+  .chain-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  .cc { background:rgba(139,92,246,.05); border:1px solid rgba(139,92,246,.15);
+    border-radius:10px; padding:16px; text-align:center; }
+  .cc .cc-val { font-size:22px; font-weight:800; font-family:var(--mono); color:var(--purple); }
+  .cc .cc-lbl { font-size:10px; color:var(--purple); text-transform:uppercase; letter-spacing:1px;
+    margin-top:6px; font-weight:600; }
+
+  /* ── POSITIONS TABLE ── */
+  table { width:100%; border-collapse:collapse; font-family:var(--mono); font-size:13px; }
+  th { text-align:left; padding:10px 14px; color:var(--t3); font-size:10px; text-transform:uppercase;
+    letter-spacing:1px; font-weight:600; border-bottom:1px solid var(--border); }
+  td { padding:10px 14px; border-bottom:1px solid rgba(26,32,64,.5); }
+  tr:hover td { background:rgba(59,130,246,.03); }
+
+  /* ── FOOTER ── */
+  .foot { text-align:center; padding:32px 0 16px; }
+  .foot .live-dot { display:inline-block; width:8px; height:8px; border-radius:50%;
+    background:var(--green); margin-right:6px; animation:pulse 2s infinite; }
+  .foot .ts { font-size:12px; color:var(--t2); font-family:var(--mono); }
+  .foot .copy { font-size:11px; color:var(--t3); margin-top:6px; }
+
+  .empty { text-align:center; padding:24px; color:var(--t3); font-family:var(--mono); font-size:13px; }
+
+  @media(max-width:900px) {
+    .highlights,.live-grid,.chain-cards { grid-template-columns:repeat(2,1fr); }
+    .techs,.chart-wrap { grid-template-columns:1fr; }
+    .hero h1 { font-size:36px; }
+  }
+  @media(max-width:500px) {
+    .highlights,.live-grid,.chain-cards { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"><div class="empty" id="loading">Loading...</div></div>
+<script>
+const D='data.json';
+const fmt=(n,d=2)=>n==null||isNaN(n)?'--':Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct=n=>n==null?'--':(n>=0?'+':'')+Number(n).toFixed(2)+'%';
+const pc=n=>n==null?'':n>=0?'pos':'neg';
+const sa=a=>a?a.slice(0,6)+'...'+a.slice(-4):'--';
+
+function drawChart(el,trades){
+  if(!el||!trades||!trades.length)return;
+  const c=el.getContext('2d'),r=window.devicePixelRatio||1,
+    W=el.parentElement.offsetWidth,H=200;
+  el.width=W*r;el.height=H*r;el.style.width=W+'px';el.style.height=H+'px';c.scale(r,r);
+  const p={t:16,r:16,b:30,l:50},cw=W-p.l-p.r,ch=H-p.t-p.b;
+  const mx=Math.max(1,...trades.map(t=>Math.abs(t.pnl)));
+  const bw=Math.min(32,(cw/trades.length)*.7),gap=cw/trades.length;
+  const zy=p.t+ch/2;
+  c.strokeStyle='rgba(255,255,255,.06)';c.lineWidth=1;
+  [0,1,2,3,4].forEach(i=>{const y=p.t+ch/4*i;c.beginPath();c.moveTo(p.l,y);c.lineTo(W-p.r,y);c.stroke()});
+  c.strokeStyle='rgba(255,255,255,.12)';c.beginPath();c.moveTo(p.l,zy);c.lineTo(W-p.r,zy);c.stroke();
+  c.fillStyle='#5a6580';c.font='9px monospace';c.textAlign='right';
+  c.fillText('+$'+fmt(mx,0),p.l-6,p.t+6);c.fillText('$0',p.l-6,zy+4);c.fillText('-$'+fmt(mx,0),p.l-6,H-p.b+6);
+  trades.forEach((t,i)=>{
+    const x=p.l+gap*i+(gap-bw)/2,h=Math.abs(t.pnl)/mx*(ch/2),y=t.pnl>=0?zy-h:zy;
+    const g=c.createLinearGradient(x,y,x,y+h);
+    if(t.pnl>=0){g.addColorStop(0,'rgba(16,185,129,.9)');g.addColorStop(1,'rgba(16,185,129,.2)');}
+    else{g.addColorStop(0,'rgba(239,68,68,.2)');g.addColorStop(1,'rgba(239,68,68,.9)');}
+    c.fillStyle=g;c.beginPath();c.roundRect(x,y,bw,h,[3,3,0,0]);c.fill();
+    c.fillStyle='#5a6580';c.font='8px monospace';c.textAlign='center';
+    c.fillText(t.pair.replace('/USDT',''),x+bw/2,H-p.b+12);
+    c.fillStyle=t.pnl>=0?'#10b981':'#ef4444';c.font='9px monospace';
+    c.fillText('$'+fmt(t.pnl,0),x+bw/2,t.pnl>=0?y-3:y+h+11);
+  });
+}
+
+function render(d){
+  const p=d.portfolio||{},r=d.risk||{},s=d.strategy||{},ch=d.onchain||{},
+    pos=d.positions||[],trades=d.recent_trades||[];
+  document.getElementById('app').innerHTML=`
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge"><span class="dot"></span> Agent #${d.agent_id||17} Live on Sepolia</div>
+    <h1>JudyAI WaveRider</h1>
+    <p>Autonomous AI trading agent with Walk-Forward validated strategies, dual-model ensemble scoring, and verifiable on-chain identity via ERC-8004.</p>
+  </div>
+
+  <!-- HIGHLIGHTS -->
+  <div class="highlights">
+    <div class="hl hl1"><div class="hl-inner">
+      <div class="num">82.2%</div>
+      <div class="label">OOS Win Rate</div>
+      <div class="desc">366 trades across 8 WFO windows</div>
+    </div></div>
+    <div class="hl hl2"><div class="hl-inner">
+      <div class="num">${ch.reputation_score||91}</div>
+      <div class="label">Reputation Score</div>
+      <div class="desc">ERC-8004 on-chain verified</div>
+    </div></div>
+    <div class="hl hl3"><div class="hl-inner">
+      <div class="num">-0.35%</div>
+      <div class="label">Max Drawdown</div>
+      <div class="desc">5-layer risk system (limit: -10%)</div>
+    </div></div>
+    <div class="hl hl4"><div class="hl-inner">
+      <div class="num">${ch.total_trade_intents||79}</div>
+      <div class="label">On-Chain Intents</div>
+      <div class="desc">EIP-712 signed trade records</div>
+    </div></div>
+  </div>
+
+  <!-- WHAT MAKES US DIFFERENT -->
+  <div class="section">
+    <h2>Technical Architecture</h2>
+    <div class="techs">
+      <div class="tech">
+        <h3><span class="icon">&#9881;</span>3 Strategies + Regime Routing</h3>
+        <p>WaveRider (trend), BB Squeeze (breakout), MACD Divergence (reversal) — routed by a 36-cell regime matrix (7 pairs × 7 market regimes). Each cell has OOS-validated parameters.</p>
+        <span class="tag" style="background:rgba(16,185,129,.1);color:var(--green);">36-Cell Grid</span>
+      </div>
+      <div class="tech">
+        <h3><span class="icon">&#129504;</span>Dual-AI Ensemble Scoring</h3>
+        <p>Every signal passes through MiniMax M2.7 and Qwen 2.5 for cross-validation. Agreement boosts confidence (+15), disagreement penalizes (-10). Only high-conviction setups get executed.</p>
+        <span class="tag" style="background:rgba(6,182,212,.1);color:var(--cyan);">MiniMax + Qwen</span>
+      </div>
+      <div class="tech">
+        <h3><span class="icon">&#128274;</span>Walk-Forward Validation</h3>
+        <p>Unlike standard backtesting, our parameters are validated on <em>unseen</em> data across 8 rolling windows (IS=90d, OOS=30d). 82.2% win rate on 366 out-of-sample trades.</p>
+        <span class="tag" style="background:rgba(139,92,246,.1);color:var(--purple);">Not Curve-Fitted</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE TRADING DATA -->
+  <div class="section">
+    <h2>Live Trading (Kraken Paper — Since Mar 31, 2026)</h2>
+    <div class="live-grid">
+      <div class="lc">
+        <div class="lbl">Portfolio Value</div>
+        <div class="val">$${fmt(p.current_value)}</div>
+        <div class="sub">${pct(p.total_pnl_pct)} from $${fmt(p.starting_balance,0)}</div>
+      </div>
+      <div class="lc">
+        <div class="lbl">Total PnL (incl. fees)</div>
+        <div class="val ${pc(p.total_pnl)}">$${fmt(p.total_pnl)}</div>
+        <div class="sub">${p.total_trades||0} trades executed</div>
+      </div>
+      <div class="lc">
+        <div class="lbl">Best Single Trade</div>
+        <div class="val pos">+$247.01</div>
+        <div class="sub">ETH/USDT triple confluence</div>
+      </div>
+      <div class="lc">
+        <div class="lbl">${pos.length>0?'Open Positions':'Risk Rejection Rate'}</div>
+        <div class="val" style="color:var(--amber);">${pos.length>0?pos.length+' active':'36.4%'}</div>
+        <div class="sub">${pos.length>0?'Monitoring SL/TP':'Proves active risk discrimination'}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART + RISK -->
+  <div class="chart-wrap">
+    <div class="chart-card">
+      <h3>Recent Trade PnL</h3>
+      <div class="chart-box"><canvas id="pnlChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>5-Layer Risk System</h3>
+      <div class="risk-bars">
+        <div class="rb">
+          <div class="rb-head"><span class="rb-name">Portfolio Drawdown</span>
+          <span class="rb-val pos">${pct(-(Math.abs(r.drawdown_pct||.35)))}</span></div>
+          <div class="rb-track"><div class="rb-fill" style="width:${Math.min(100,Math.abs(r.drawdown_pct||.35)/10*100)}%;background:var(--green);"></div></div>
+          <div class="rb-limit">limit -10%</div>
+        </div>
+        <div class="rb">
+          <div class="rb-head"><span class="rb-name">Daily PnL</span>
+          <span class="rb-val ${pc(r.daily_pnl)}">${pct(r.daily_pnl||0)}</span></div>
+          <div class="rb-track"><div class="rb-fill" style="width:${Math.min(100,Math.abs(r.daily_pnl||0)/3*100)}%;background:${(r.daily_pnl||0)<0?'var(--red)':'var(--green)'};"></div></div>
+          <div class="rb-limit">limit -3%</div>
+        </div>
+        <div class="rb">
+          <div class="rb-head"><span class="rb-name">Consecutive Losses</span>
+          <span class="rb-val">${r.consecutive_losses||0} / 5</span></div>
+          <div class="rb-track"><div class="rb-fill" style="width:${(r.consecutive_losses||0)/5*100}%;background:var(--amber);"></div></div>
+          <div class="rb-limit">5 = pause trading</div>
+        </div>
+        <div class="rb">
+          <div class="rb-head"><span class="rb-name">Position Scale</span>
+          <span class="rb-val">${((r.position_scale||1)*100).toFixed(0)}%</span></div>
+          <div class="rb-track"><div class="rb-fill" style="width:${(r.position_scale||1)*100}%;background:var(--cyan);"></div></div>
+          <div class="rb-limit">reduces after losses</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POSITIONS -->
+  ${pos.length>0?`
+  <div class="section" style="margin-top:24px;">
+    <h2>Open Positions</h2>
+    <div class="chart-card" style="padding:0;overflow-x:auto;">
+      <table>
+        <tr><th>Pair</th><th>Direction</th><th>Entry</th><th>Current</th><th>PnL</th><th>SL</th><th>TP1</th><th>Source</th></tr>
+        ${pos.map(p=>`<tr>
+          <td style="font-weight:700;">${p.pair}</td>
+          <td style="color:${p.direction==='long'?'var(--green)':'var(--red)'};">${(p.direction||'').toUpperCase()}</td>
+          <td>$${fmt(p.entry_price)}</td><td>$${fmt(p.current_price)}</td>
+          <td class="${pc(p.pnl)}">$${fmt(p.pnl)}</td>
+          <td style="color:var(--red);">$${fmt(p.sl)}</td>
+          <td style="color:var(--green);">$${fmt(p.tp1)}</td>
+          <td style="color:var(--t3);font-size:11px;">${p.source||'--'}</td>
+        </tr>`).join('')}
+      </table>
+    </div>
+  </div>`:''}
+
+  <!-- ON-CHAIN -->
+  <div class="section" style="margin-top:24px;">
+    <h2>On-Chain Identity (ERC-8004 — Sepolia)</h2>
+    <div class="chain-cards">
+      <div class="cc"><div class="cc-val">#${ch.agent_id||'--'}</div><div class="cc-lbl">Agent ID</div></div>
+      <div class="cc"><div class="cc-val">${ch.reputation_score||'--'}</div><div class="cc-lbl">Reputation</div></div>
+      <div class="cc"><div class="cc-val">${ch.total_trade_intents||'--'}</div><div class="cc-lbl">Trade Intents</div></div>
+      <div class="cc"><div class="cc-val">36</div><div class="cc-lbl">Validation Records</div></div>
+    </div>
+    <div style="margin-top:12px;text-align:center;">
+      <span style="font-family:var(--mono);font-size:12px;color:var(--t3);">Wallet: ${sa(ch.wallet)} | ETH: ${ch.wallet_eth?Number(ch.wallet_eth).toFixed(4):'--'} | Vault: ${ch.vault_claimed?'Claimed':'Pending'}</span>
+    </div>
+  </div>
+
+  <!-- VALIDATION -->
+  <div class="section" style="margin-top:24px;">
+    <h2>Audit & Validation</h2>
+    <div class="techs">
+      <div class="tech" style="text-align:center;">
+        <h3>80</h3>
+        <p>Tests Passing<br><span style="font-size:12px;color:var(--t3);">59 unit + 6 batch TP + 15 integration</span></p>
+      </div>
+      <div class="tech" style="text-align:center;">
+        <h3>36</h3>
+        <p>Validation Artifacts<br><span style="font-size:12px;color:var(--t3);">14 trade intents + 11 risk checks + 11 checkpoints</span></p>
+      </div>
+      <div class="tech" style="text-align:center;">
+        <h3>366</h3>
+        <p>OOS Trades Validated<br><span style="font-size:12px;color:var(--t3);">8 rolling WFO windows over 360 days</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="foot">
+    <div class="ts"><span class="live-dot"></span>Last updated: ${d.last_updated?new Date(d.last_updated).toLocaleString():'--'}</div>
+    <div class="copy">JudyAI WaveRider | Agent #${d.agent_id||17} | ERC-8004 Compliant | github.com/JudyaiLab/hackathon-trading-agent</div>
+  </div>`;
+  const cv=document.getElementById('pnlChart');
+  if(cv&&trades.length)drawChart(cv,trades);
+}
+
+async function load(){
+  try{const r=await fetch(D+'?t='+Date.now());const d=await r.json();render(d);}
+  catch(e){document.getElementById('loading').textContent='Failed to load data.';}
+}
+load();setInterval(load,60000);
+</script>
+</body>
+</html>

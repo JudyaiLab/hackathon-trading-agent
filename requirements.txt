@@ -1,0 +1,7 @@
+numpy==1.26.4
+pandas==2.2.2
+# On-chain ERC-8004 registration (optional — agent runs without it)
+web3==6.20.1
+requests==2.32.3
+# Running tests
+pytest==8.2.2

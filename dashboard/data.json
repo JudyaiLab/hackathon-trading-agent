@@ -1,0 +1,111 @@
+{
+  "agent_name": "JudyAI WaveRider",
+  "agent_id": 17,
+  "status": "ACTIVE",
+  "portfolio": {
+    "starting_balance": 100000.0,
+    "current_value": 99568.45663143384,
+    "total_pnl": -431.54336856615555,
+    "total_pnl_pct": -0.4315433685661556,
+    "unrealized_pnl": 0.0,
+    "unrealized_pnl_pct": 0.0,
+    "total_trades": 22
+  },
+  "positions": [],
+  "recent_trades": [
+    {
+      "pair": "ETH/USDT",
+      "pnl": 44.180995675747994,
+      "reason": "TP1_PARTIAL"
+    },
+    {
+      "pair": "SOL/USDT",
+      "pnl": -114.4223669013249,
+      "reason": "SL_HIT"
+    },
+    {
+      "pair": "SOL/USDT",
+      "pnl": -117.61342892646114,
+      "reason": "SL_HIT"
+    },
+    {
+      "pair": "BNB/USDT",
+      "pnl": 25.623540084111927,
+      "reason": "AI_REDUCE_50pct"
+    },
+    {
+      "pair": "BTC/USDT",
+      "pnl": -6.7719772793366575,
+      "reason": "SL_HIT"
+    },
+    {
+      "pair": "BTC/USDT",
+      "pnl": 1.5983548858065162,
+      "reason": "AI_REDUCE_50pct"
+    },
+    {
+      "pair": "BTC/USDT",
+      "pnl": 8.124970669515521,
+      "reason": "AI_EXIT_NOW"
+    },
+    {
+      "pair": "BTC/USDT",
+      "pnl": 0.6601559161885246,
+      "reason": "AI_REDUCE_50pct"
+    },
+    {
+      "pair": "BTC/USDT",
+      "pnl": -18.90925323763114,
+      "reason": "JUDY_MANUAL_CLOSE"
+    },
+    {
+      "pair": "BTC/USDT",
+      "pnl": -44.09546254576187,
+      "reason": "AI_EXIT_NOW"
+    }
+  ],
+  "risk": {
+    "drawdown_pct": 0.2723871764354844,
+    "daily_pnl": 0.0,
+    "consecutive_losses": 2,
+    "position_scale": 1.0,
+    "daily_stopped": false,
+    "daily_stop_reason": ""
+  },
+  "strategy": {
+    "signals_generated": 186,
+    "signals_passed_ai": 6,
+    "signals_executed": 24,
+    "rejection_rate": 87.09677419354838,
+    "win_rate": 40.0,
+    "backtest_win_rate": 82.2,
+    "strategies": [
+      "WaveRider",
+      "BB Squeeze",
+      "MACD Divergence"
+    ]
+  },
+  "reputation": {
+    "score": 94,
+    "validation_score": 98
+  },
+  "performance": {
+    "win_rate": 40.0,
+    "total_trades": 24,
+    "total_pnl": -431.54336856615555
+  },
+  "onchain": {
+    "agent_id": 17,
+    "wallet": "0x95C8B49C2A6124C436EA1a3f378991313f6f1c0A",
+    "reputation_score": 94,
+    "validation_score": 98,
+    "total_trade_intents": 67,
+    "total_risk_checks": 62,
+    "total_strategy_checkpoints": 85,
+    "total_validation_artifacts": 214,
+    "vault_claimed": true,
+    "wallet_eth": 0.3051805973194936,
+    "last_activity": "2026-04-09T10:41:57.901228+00:00"
+  },
+  "last_updated": "2026-04-10T10:00:07.121093+00:00"
+}
